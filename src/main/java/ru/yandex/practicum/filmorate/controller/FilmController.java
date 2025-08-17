@@ -33,9 +33,6 @@ public class FilmController {
 
     @PutMapping
     public Film update(@Valid @RequestBody Film film) throws ValidationException {
-//        if (isNotValidation(film)) {
-//            throw new ValidationException("Not validation");
-//        }
 
         for (Film value : films) {
             if (value.getId() == film.getId()) {
@@ -64,11 +61,7 @@ public class FilmController {
             log.warn("Release date has less 1985.12.28");
 
             return true;
-        } //else if (!film.getDuration().isPositive()) {
-//            log.warn("Duration isn't positive");
-//
-//            return true;
-//        }
+        }
 
         return false;
     }

@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.yandex.practicum.filmorate.model.Film;
 
-//import java.time.Duration;
 import java.time.LocalDate;
 
 @WebMvcTest(controllers = FilmController.class)
@@ -76,14 +75,6 @@ class FilmControllerTest {
 
         Assertions.assertThrows(Exception.class, () -> filmController.add(film));
     }
-
-//    @Test
-//    public void addNotCorrectDurationFilm() {
-//        Film film = new Film(1, "Movie", "Something movie",
-//                LocalDate.of(1999, 11, 28), -45);
-//
-//        Assertions.assertThrows(Exception.class, () -> filmController.add(film));
-//    }
 
     @Test
     @DisplayName("Duration isn't correct code: 400")
