@@ -22,7 +22,7 @@ public class UserController {
         log.info("User created");
         users.add(user);
 
-        return checkName(user);
+        return user;
     }
 
     @PutMapping
@@ -35,7 +35,7 @@ public class UserController {
                 value.setBirthday(user.getBirthday());
 
                 log.info("User updated");
-                return checkName(value);
+                return value;
             }
         }
 
@@ -45,6 +45,7 @@ public class UserController {
     @GetMapping
     public List<User> getAll() {
         log.info("Got users");
+
         return users;
     }
 
