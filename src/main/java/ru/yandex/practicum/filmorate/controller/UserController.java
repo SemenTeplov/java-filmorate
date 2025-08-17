@@ -49,6 +49,7 @@ public class UserController {
 
     @GetMapping
     public List<User> getAll() {
+        users.sort((u1, u2) -> u2.getId() - u1.getId());
         log.info("Got users");
 
         return users;
