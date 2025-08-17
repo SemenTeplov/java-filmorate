@@ -22,7 +22,7 @@ public class UserController {
         return checkName(user);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public User update(@Valid @RequestBody User user) {
         log.info("User updated");
         return checkName(user);

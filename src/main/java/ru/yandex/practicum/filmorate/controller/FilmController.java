@@ -29,7 +29,7 @@ public class FilmController {
         return film;
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public Film update(@Valid @RequestBody Film film) throws ValidationException {
         if (isNotValidation(film)) {
             throw new ValidationException("Not validation");
