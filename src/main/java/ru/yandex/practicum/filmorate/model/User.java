@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class User {
+    @NotNull(message = "id is null")
     private int id;
 
     @NotNull(message = "Email is null")

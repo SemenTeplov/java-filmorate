@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class FilmController {
     List<Film> films = new ArrayList<>();
 
     @PostMapping
-    public Film add(@Valid @RequestBody Film film) throws ValidationException {
+    public Film add(@Valid @RequestBody @NotNull Film film) throws ValidationException {
         if (isNotValidation(film)) {
             throw new ValidationException("Not validation");
         }
@@ -30,7 +31,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@Valid @RequestBody Film film) throws ValidationException {
+    public Film update(@Valid @RequestBody @NotNull Film film) throws ValidationException {
         if (isNotValidation(film)) {
             throw new ValidationException("Not validation");
         }

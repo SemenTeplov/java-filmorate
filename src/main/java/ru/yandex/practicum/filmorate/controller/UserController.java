@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,13 @@ public class UserController {
     List<User> users = new ArrayList<>();
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
+    public User create(@Valid @RequestBody @NotNull User user) {
         log.info("User created");
         return checkName(user);
     }
 
     @PutMapping
-    public User update(@Valid @RequestBody User user) {
+    public User update(@Valid @RequestBody @NotNull User user) {
         log.info("User updated");
         return checkName(user);
     }

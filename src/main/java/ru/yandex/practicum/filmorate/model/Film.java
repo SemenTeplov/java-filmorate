@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class Film {
+    @NotNull(message = "id is null")
     private int id;
 
     @NotNull(message = "Name is null")
