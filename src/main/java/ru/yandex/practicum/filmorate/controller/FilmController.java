@@ -24,11 +24,8 @@ public class FilmController {
             throw new ValidationException("Not validation");
         }
 
-        if (film.getId() == 0) {
-            film.setId(films.size() + 1);
-        }
-
         log.info("Film added");
+        film.setId(films.size() + 1);
         films.add(film);
 
         return film;
@@ -68,7 +65,7 @@ public class FilmController {
             log.warn("Release date has less 1985.12.28");
 
             return true;
-        } else if (film.getDuration().isNegative()) {
+        } else if (!film.getDuration().isPositive()) {
             log.warn("Duration isn't positive");
 
             return true;
