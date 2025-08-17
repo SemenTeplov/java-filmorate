@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.Duration;
+//import java.time.Duration;
 import java.time.LocalDate;
 
 @WebMvcTest(controllers = FilmController.class)
@@ -31,7 +31,7 @@ class FilmControllerTest {
     @Test
     public void addFilm() throws Exception {
         Film film = new Film(1, "Movie", "Something movie",
-                LocalDate.of(2011, 3, 15), Duration.ofMinutes(45));
+                LocalDate.of(2011, 3, 15), 45);
         Film other = filmController.add(film);
 
         Assertions.assertEquals(film, other);
@@ -72,16 +72,31 @@ class FilmControllerTest {
     @Test
     public void addNotCorrectDateFilm() {
         Film film = new Film(1, "Movie", "Something movie",
-                LocalDate.of(1985, 11, 28), Duration.ofMinutes(45));
+                LocalDate.of(1985, 11, 28), 45);
 
         Assertions.assertThrows(Exception.class, () -> filmController.add(film));
     }
 
-    @Test
-    public void addNotCorrectDurationFilm() {
-        Film film = new Film(1, "Movie", "Something movie",
-                LocalDate.of(1999, 11, 28), Duration.ofMinutes(-45));
+//    @Test
+//    public void addNotCorrectDurationFilm() {
+//        Film film = new Film(1, "Movie", "Something movie",
+//                LocalDate.of(1999, 11, 28), -45);
+//
+//        Assertions.assertThrows(Exception.class, () -> filmController.add(film));
+//    }
 
-        Assertions.assertThrows(Exception.class, () -> filmController.add(film));
+    @Test
+    @DisplayName("Duration isn't correct code: 400")
+    public void addNotCorrectDurationFilm() throws Exception {
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/films")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"id\":1,\"name\":\"movie\",\"description\":\"description\",\"releaseDate\":\"1990-12-12\", \"duration\":\"-45\"}"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
+
+        String message = response.getResolvedException().getMessage();
+
+        Assertions.assertTrue(message.contains("default message [duration]"));
+        Assertions.assertTrue(message.contains("default message [Duration isn't positive]"));
     }
 }
