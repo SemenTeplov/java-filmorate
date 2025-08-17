@@ -64,8 +64,8 @@ public class FilmController {
             log.warn("Release date has less 1985.12.28");
 
             return true;
-        } else if (film.getDuration().isNegative()) {
-            log.warn("Duration is negative");
+        } else if (film.getDuration().isNegative() || film.getDuration().isZero()) {
+            log.warn("Duration isn't positive");
 
             return true;
         }
