@@ -24,8 +24,11 @@ public class FilmController {
             throw new ValidationException("Not validation");
         }
 
+        if (film.getId() == 0) {
+            film.setId(films.size() + 1);
+        }
+
         log.info("Film added");
-        film.setId(films.size() + 1);
         films.add(film);
 
         return film;
