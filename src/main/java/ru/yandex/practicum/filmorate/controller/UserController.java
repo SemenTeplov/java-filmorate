@@ -25,6 +25,7 @@ public class UserController {
             user.setName(user.getLogin());
         }
 
+        user.setId(users.size() + 1);
         users.add(user);
 
         return user;
