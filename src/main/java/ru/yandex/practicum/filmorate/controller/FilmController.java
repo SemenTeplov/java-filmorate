@@ -36,9 +36,20 @@ public class FilmController {
             throw new ValidationException("Not validation");
         }
 
-        log.info("Film updated");
+        for (Film value : films) {
+            if (value.getId() == film.getId()) {
+                value.setName(film.getName());
+                value.setDescription(film.getDescription());
+                value.setReleaseDate(film.getReleaseDate());
+                value.setDuration(film.getDuration());
 
-        return film;
+                log.info("Film updated");
+
+                return film;
+            }
+        }
+
+        throw new ValidationException("Film not found");
     }
 
     @GetMapping
