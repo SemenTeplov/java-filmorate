@@ -29,7 +29,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Not email code: 400")
-    public void AddWithoutEmailFilm() throws Exception {
+    public void addWithoutEmailFilm() throws Exception {
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"id\":1,\"email\":\"\",\"login\":\"Login\",\"name\":\"Name\"}"))
@@ -44,7 +44,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Not correct email code: 400")
-    public void AddNotCorrectEmailFilm() throws Exception {
+    public void addNotCorrectEmailFilm() throws Exception {
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"Login\",\"name\":\"Name\"}"))
@@ -59,7 +59,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Not login code: 400")
-    public void AddNotLoginFilm() throws Exception {
+    public void addNotLoginFilm() throws Exception {
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"\",\"name\":\"Name\"}"))
@@ -82,7 +82,7 @@ class UserControllerTest {
 
     @Test
     @DisplayName("Not correct birthday code: 400")
-    public void AddNotCorrectBirthdayFilm() throws Exception {
+    public void addNotCorrectBirthdayFilm() throws Exception {
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"Login\",\"name\":\"Name\",\"birthday\":\"" + LocalDate.now() + "\"}"))
