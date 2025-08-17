@@ -30,7 +30,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Not email code: 400")
     public void addWithoutEmailFilm() throws Exception {
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"id\":1,\"email\":\"\",\"login\":\"Login\",\"name\":\"Name\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -45,7 +45,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Not correct email code: 400")
     public void addNotCorrectEmailFilm() throws Exception {
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"Login\",\"name\":\"Name\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -60,7 +60,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Not login code: 400")
     public void addNotLoginFilm() throws Exception {
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"\",\"name\":\"Name\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -83,7 +83,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Not correct birthday code: 400")
     public void addNotCorrectBirthdayFilm() throws Exception {
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\"id\":1,\"email\":\"email@\",\"login\":\"Login\",\"name\":\"Name\",\"birthday\":\"" + LocalDate.now() + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())

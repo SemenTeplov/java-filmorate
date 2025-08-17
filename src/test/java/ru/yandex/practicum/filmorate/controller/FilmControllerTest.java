@@ -40,7 +40,7 @@ class FilmControllerTest {
     @Test
     @DisplayName("Not name code: 400")
     public void notCorrectNameAddFilm() throws Exception {
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/film")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/films")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"id\":1,\"name\":\"\",\"description\":\"Something movie\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -57,7 +57,7 @@ class FilmControllerTest {
     public void notCorrectDescriptionAddFilm() throws Exception {
         String string = "description".repeat(20);
 
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/film")
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/films")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"id\":1,\"name\":\"movie\",\"description\":\"" + string + "\"}"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
