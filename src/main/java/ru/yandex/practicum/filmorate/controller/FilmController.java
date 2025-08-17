@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +19,6 @@ public class FilmController {
 
     @PostMapping
     public Film add(@Valid @RequestBody Film film) throws ValidationException {
-        if (isNotValidation(film)) {
-            throw new ValidationException("Not validation");
-        }
-
         log.info("Film added");
         film.setId(films.size() + 1);
         films.add(film);
@@ -54,15 +49,5 @@ public class FilmController {
         log.info("Got films");
 
         return films;
-    }
-
-    private boolean isNotValidation(Film film) {
-        if (film.getReleaseDate().isBefore(LocalDate.of(1985, 12, 28))) {
-            log.warn("Release date has less 1985.12.28");
-
-            return true;
-        }
-
-        return false;
     }
 }

@@ -69,11 +69,18 @@ class FilmControllerTest {
     }
 
     @Test
-    public void addNotCorrectDateFilm() {
-        Film film = new Film(1, "Movie", "Something movie",
-                LocalDate.of(1985, 11, 28), 45);
+    @DisplayName("Release date  isn't correct code: 400")
+    public void addNotCorrectReleaseDateFilm() throws Exception {
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/films")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"id\":1,\"name\":\"movie\",\"description\":\"description\",\"releaseDate\":\"1895-11-28\", \"duration\":\"45\"}"))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andReturn();
 
-        Assertions.assertThrows(Exception.class, () -> filmController.add(film));
+        String message = response.getResolvedException().getMessage();
+
+        Assertions.assertTrue(message.contains("default message [releaseDate]"));
+        Assertions.assertTrue(message.contains("default message [Release date has less 1895.12.28]"));
     }
 
     @Test

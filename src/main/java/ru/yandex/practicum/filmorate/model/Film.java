@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import ru.yandex.practicum.filmorate.annotations.ValidReleaseDate;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,7 @@ public class Film {
     @Length(max = 200, message = "Length of description more 200")
     private String description;
 
+    @ValidReleaseDate
     private LocalDate releaseDate;
 
     @Min(value = 1, message = "Duration isn't positive")
