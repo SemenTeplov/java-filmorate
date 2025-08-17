@@ -20,6 +20,11 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         log.info("User created");
+
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+
         users.add(user);
 
         return user;

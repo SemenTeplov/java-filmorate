@@ -45,7 +45,7 @@ public class FilmController {
 
                 log.info("Film updated");
 
-                return film;
+                return value;
             }
         }
 
