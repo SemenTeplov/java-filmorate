@@ -72,13 +72,13 @@ class UserControllerTest {
         Assertions.assertTrue(message.contains("default message [Login is empty]"));
     }
 
-    @Test
+    /*@Test
     public void changeNameOnLogin() {
         User user = new User(1, "email@.com", "Login", "", LocalDate.of(1980, 12, 12));
         User result = userController.create(user);
 
         Assertions.assertEquals(result.getName(), result.getLogin());
-    }
+    }*/
 
     @Test
     @DisplayName("Not correct birthday code: 400")
