@@ -25,6 +25,7 @@ public class FilmController {
         }
 
         log.info("Film added");
+        film.setId(films.size() + 1);
         films.add(film);
 
         return film;
