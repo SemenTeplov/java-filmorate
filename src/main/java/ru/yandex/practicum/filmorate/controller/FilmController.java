@@ -25,6 +25,7 @@ public class FilmController {
         }
 
         log.info("Film added");
+        films.add(film);
 
         return film;
     }
