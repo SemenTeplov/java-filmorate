@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-//import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 
@@ -71,14 +70,6 @@ class UserControllerTest {
         Assertions.assertTrue(message.contains("default message [login]"));
         Assertions.assertTrue(message.contains("default message [Login is empty]"));
     }
-
-    /*@Test
-    public void changeNameOnLogin() {
-        User user = new User(1, "email@.com", "Login", "", LocalDate.of(1980, 12, 12));
-        User result = userController.create(user);
-
-        Assertions.assertEquals(result.getName(), result.getLogin());
-    }*/
 
     @Test
     @DisplayName("Not correct birthday code: 400")

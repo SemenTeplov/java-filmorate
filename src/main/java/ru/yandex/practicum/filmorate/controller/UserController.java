@@ -27,19 +27,22 @@ public class UserController {
 
     @PutMapping
     public User update(@Valid @RequestBody User user) throws ValidationException {
-        for (User value : users) {
-            if (value.getId() == user.getId()) {
-                value.setName(user.getName());
-                value.setLogin(user.getLogin());
-                value.setEmail(user.getEmail());
-                value.setBirthday(user.getBirthday());
+//        for (User value : users) {
+//            if (value.getId() == user.getId()) {
+//                value.setName(user.getName());
+//                value.setLogin(user.getLogin());
+//                value.setEmail(user.getEmail());
+//                value.setBirthday(user.getBirthday());
+//
+//                log.info("User updated");
+//                return value;
+//            }
+//        }
+//
+//        throw new ValidationException("User not found");
 
-                log.info("User updated");
-                return value;
-            }
-        }
-
-        throw new ValidationException("User not found");
+        log.info("User updated");
+        return user;
     }
 
     @GetMapping
@@ -47,14 +50,5 @@ public class UserController {
         log.info("Got users");
 
         return users;
-    }
-
-    private User checkName(User user) {
-        if (user.getName().isBlank()) {
-            log.debug("user's name changed user's login");
-            user.setName(user.getLogin());
-        }
-
-        return user;
     }
 }
