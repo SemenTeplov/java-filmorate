@@ -5,49 +5,48 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
 
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    List<Film> films = new ArrayList<>();
+    private final Map<Integer, Film> films = new HashMap<>();
 
     @PostMapping
-    public Film add(@Valid @RequestBody Film film) throws ValidationException {
+    public Film add(@Valid @RequestBody Film film) {
         log.info("Film added");
         film.setId(films.size() + 1);
-        films.add(film);
+        films.put(film.getId(), film);
 
         return film;
     }
 
     @PutMapping
-    public Film update(@Valid @RequestBody Film film) throws ValidationException {
+    public Film update(@Valid @RequestBody Film film) {
 
-        for (Film value : films) {
-            if (value.getId() == film.getId()) {
-                value.setName(film.getName());
-                value.setDescription(film.getDescription());
-                value.setReleaseDate(film.getReleaseDate());
-                value.setDuration(film.getDuration());
+        if (films.containsKey(film.getId())) {
+            Film value = films.get(film.getId());
 
-                log.info("Film updated");
-                return value;
-            }
+            value.setName(film.getName());
+            value.setDescription(film.getDescription());
+            value.setReleaseDate(film.getReleaseDate());
+            value.setDuration(film.getDuration());
+
+            log.info("Film updated");
+            return value;
         }
 
-        throw new ValidationException("Film not found");
+        throw new NotFoundException("Film not found");
     }
 
     @GetMapping
-    public List<Film> getAll() {
+    public Collection<Film> getAll() {
         log.info("Got films");
 
-        return films;
+        return films.values();
     }
 }

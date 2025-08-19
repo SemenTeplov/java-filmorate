@@ -16,15 +16,8 @@ import java.time.LocalDate;
 
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
-    static UserController userController;
-
     @Autowired
     MockMvc mockMvc;
-
-    @BeforeAll
-    public static void init() {
-        userController = new UserController();
-    }
 
     @Test
     @DisplayName("Not email code: 400")

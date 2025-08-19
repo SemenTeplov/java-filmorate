@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,10 @@ import java.time.LocalDate;
 
 @WebMvcTest(controllers = FilmController.class)
 class FilmControllerTest {
-    static FilmController filmController;
+    FilmController filmController = new FilmController();
 
     @Autowired
     MockMvc mockMvc;
-
-    @BeforeAll
-    public static void init() {
-        filmController = new FilmController();
-    }
 
     @Test
     public void addFilm() throws Exception {
