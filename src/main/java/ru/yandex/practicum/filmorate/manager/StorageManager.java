@@ -6,6 +6,6 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 public class StorageManager {
-    public final static FilmStorage filmStorage = new InMemoryFilmStorage();
-    public final static UserStorage userStorage = new InMemoryUserStorage();
+    public static final FilmStorage filmStorage = new InMemoryFilmStorage();
+    public static final UserStorage userStorage = new InMemoryUserStorage();
 }
