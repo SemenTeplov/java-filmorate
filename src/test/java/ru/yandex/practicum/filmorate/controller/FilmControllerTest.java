@@ -10,24 +10,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import ru.yandex.practicum.filmorate.model.Film;
-
-import java.time.LocalDate;
 
 @WebMvcTest(controllers = FilmController.class)
 class FilmControllerTest {
-    FilmController filmController = new FilmController();
-
     @Autowired
     MockMvc mockMvc;
 
     @Test
+    @DisplayName("Add film code: 201")
     public void addFilm() throws Exception {
-        Film film = new Film(1, "Movie", "Something movie",
-                LocalDate.of(2011, 3, 15), 45);
-        Film other = filmController.add(film);
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post("/films")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"id\":1,\"name\":\"movie\",\"description\":\"description\",\"releaseDate\":\"1990-12-12\", \"duration\":\"45\"}"))
+                        .andReturn();
 
-        Assertions.assertEquals(film, other);
+        Assertions.assertEquals(201, response.getResponse().getStatus());
     }
 
     @Test
@@ -90,5 +87,51 @@ class FilmControllerTest {
 
         Assertions.assertTrue(message.contains("default message [duration]"));
         Assertions.assertTrue(message.contains("default message [Duration isn't positive]"));
+    }
+
+    @Test
+    @DisplayName("Add like code: 201")
+    public void addLike() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/films")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\"id\":1,\"name\":\"movie\",\"description\":\"description\",\"releaseDate\":\"1990-12-12\", \"duration\":\"45\"}"));
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put("/films/1/like/1")).andReturn();
+
+        Assertions.assertEquals(201, response.getResponse().getStatus());
+    }
+
+    @Test
+    @DisplayName("Add like to don't exist film code: 404")
+    public void addLikeWrong() throws Exception {
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put("/films/1/like/1")).andReturn();
+
+        Assertions.assertEquals(404, response.getResponse().getStatus());
+    }
+
+    @Test
+    @DisplayName("Remove like code: 200")
+    public void removeLike() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/films")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content("{\"id\":1,\"name\":\"movie\",\"description\":\"description\",\"releaseDate\":\"1990-12-12\", \"duration\":\"45\"}"));
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.delete("/films/1/like/1")).andReturn();
+
+        Assertions.assertEquals(200, response.getResponse().getStatus());
+    }
+
+    @Test
+    @DisplayName("Remove like from don't exist film code: 404")
+    public void removeLikeWrong() throws Exception {
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.delete("/films/1/like/1")).andReturn();
+
+        Assertions.assertEquals(404, response.getResponse().getStatus());
+    }
+
+    @Test
+    @DisplayName("Get all films: 200")
+    public void getAllFilms() throws Exception {
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/films/popular?count=1000")).andReturn();
+
+        Assertions.assertEquals(200, response.getResponse().getStatus());
     }
 }
