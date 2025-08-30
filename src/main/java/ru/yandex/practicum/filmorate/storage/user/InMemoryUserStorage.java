@@ -16,8 +16,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User add(User user) {
-        log.info("User created");
-
         if (user.getName() == null) {
             user.setName(user.getLogin());
         }
@@ -31,11 +29,8 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User remove(User user) {
         if (users.containsKey(user.getId())) {
-            log.info("Film deleted");
-
             return users.remove(user.getId());
         }
-        log.info("Film not found");
 
         return null;
     }
@@ -51,7 +46,6 @@ public class InMemoryUserStorage implements UserStorage {
                 value.setEmail(user.getEmail());
                 value.setBirthday(user.getBirthday());
 
-                log.info("User updated");
                 return value;
             }
         }
@@ -62,8 +56,6 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User get(Integer id) {
         if (users.containsKey(id)) {
-            log.info("Got user");
-
             return users.get(id);
         }
 
@@ -72,8 +64,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public Collection<User> getAll() {
-        log.info("Got users");
-
         return users.values();
     }
 }

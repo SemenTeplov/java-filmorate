@@ -18,7 +18,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film add(Film film) {
-        log.info("Film added");
         film.setId(films.size() + 1);
         films.put(film.getId(), film);
 
@@ -28,11 +27,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film remove(Film film) {
         if (films.containsKey(film.getId())) {
-            log.info("Film deleted");
-
             return films.remove(film.getId());
         }
-        log.info("Film not found");
 
         return null;
     }
@@ -48,7 +44,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             value.setReleaseDate(film.getReleaseDate());
             value.setDuration(film.getDuration());
 
-            log.info("Film updated");
             return value;
         }
 
@@ -58,7 +53,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film get(Integer id) {
         if (films.containsKey(id)) {
-            log.info("Got film");
 
             return films.get(id);
         }
@@ -68,8 +62,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Collection<Film> getAll() {
-        log.info("Got films");
-
         return films.values();
     }
 }

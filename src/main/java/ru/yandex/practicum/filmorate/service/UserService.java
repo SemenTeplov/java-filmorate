@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
-import ru.yandex.practicum.filmorate.manager.StorageManager;
 
 import java.util.Collection;
 import java.util.Set;
@@ -19,15 +18,17 @@ public class UserService {
     private final UserStorage users;
 
     @Autowired
-    public UserService() {
-        this.users = StorageManager.userStorage;
+    public UserService(UserStorage users) {
+        this.users = users;
     }
 
     public User create(User user) {
+        log.info("User added");
         return users.add(user);
     }
 
     public User update(User user) {
+        log.info("User updated");
         return users.update(user);
     }
 
@@ -38,6 +39,7 @@ public class UserService {
     }
 
     public User remove(User user) {
+        log.info("Film deleted");
         return users.remove(user);
     }
 
@@ -48,6 +50,7 @@ public class UserService {
     }
 
     public Collection<User> getAll() {
+        log.info("Got users");
         return users.getAll();
     }
 

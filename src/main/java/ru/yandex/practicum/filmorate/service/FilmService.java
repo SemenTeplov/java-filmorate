@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ru.yandex.practicum.filmorate.manager.StorageManager;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
@@ -22,12 +21,13 @@ public class FilmService {
     private final UserStorage users;
 
     @Autowired
-    public FilmService() {
-        this.films = StorageManager.filmStorage;
-        this.users = StorageManager.userStorage;
+    public FilmService(FilmStorage films, UserStorage users) {
+        this.films = films;
+        this.users = users;
     }
 
     public Film add(Film film) {
+        log.info("Film added");
         return films.add(film);
     }
 
@@ -37,10 +37,12 @@ public class FilmService {
     }
 
     public Film update(Film film) {
+        log.info("Film updated");
         return films.update(film);
     }
 
     public Film remove(Film film) {
+        log.info("Film deleted");
         return films.remove(film);
     }
 
@@ -50,6 +52,7 @@ public class FilmService {
     }
 
     public Collection<Film> getAll() {
+        log.info("Got films");
         return films.getAll();
     }
 
