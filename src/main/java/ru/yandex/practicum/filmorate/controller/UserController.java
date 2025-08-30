@@ -1,60 +1,69 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/users")
 public class UserController {
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
-        log.info("User created");
-
-        if (user.getName() == null) {
-            user.setName(user.getLogin());
-        }
-
-        user.setId(users.size() + 1);
-        users.put(user.getId(), user);
-
-        return user;
+        return service.create(user);
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.OK)
     public User update(@Valid @RequestBody User user) {
-        if (users.containsKey(user.getId())) {
-            User value = users.get(user.getId());
+        return service.update(user);
+    }
 
-            if (value.getId() == user.getId()) {
-                value.setName(user.getName());
-                value.setLogin(user.getLogin());
-                value.setEmail(user.getEmail());
-                value.setBirthday(user.getBirthday());
+    @PutMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addFriend(@PathVariable int id, @PathVariable int friendId) {
+        service.addFriend(id, friendId);
+    }
 
-                log.info("User updated");
-                return value;
-            }
-        }
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public User remove(@Valid @RequestBody User user) {
+        return service.remove(user);
+    }
 
-        throw new NotFoundException("User not found");
+    @DeleteMapping("/{id}/friends/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeFriend(@PathVariable int id, @PathVariable int friendId) {
+        service.removeFriend(id, friendId);
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Collection<User> getAll() {
-        log.info("Got users");
+        return service.getAll();
+    }
 
-        return users.values();
+    @GetMapping("/{id}/friends")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<User> getFriends(@PathVariable int id) {
+        return service.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{friendId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<User> getFriends(@PathVariable int id, @PathVariable int friendId) {
+        return service.getAllFriends(id, friendId);
     }
 }
