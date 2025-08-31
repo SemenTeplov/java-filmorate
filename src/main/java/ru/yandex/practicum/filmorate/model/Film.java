@@ -4,12 +4,13 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import ru.yandex.practicum.filmorate.annotations.ValidReleaseDate;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -29,4 +30,15 @@ public class Film {
 
     @Min(value = 1, message = "Duration isn't positive")
     private int duration;
+
+    @Setter(AccessLevel.NONE)
+    private final Set<Integer> likes = new HashSet<>();
+
+    public void addLike(Integer id) {
+        likes.add(id);
+    }
+
+    public void removeLike(Integer id) {
+        likes.remove(id);
+    }
 }
