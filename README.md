@@ -9,3 +9,10 @@ FROM users AS u
 LEFT JOIN friends AS lf ON lf.user_id = u.id
 JOIN users AS f ON lf.user_id = f.id
 ```
+Получение всех фильмов
+```
+SELECT *
+FROM films AS f
+JOIN generse AS g ON g.film_id = f.id
+LEFT JOIN likes AS l ON l.film_id = f.id
+```
