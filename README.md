@@ -1,6 +1,6 @@
 # Таблица для базы данных
 
-<img width="1166" height="852" alt="uml" src="https://github.com/user-attachments/assets/4ace3668-87d4-4979-a3ae-43829079a56c" />
+<img width="1404" height="736" alt="2025-09-23_20-43-46" src="https://github.com/user-attachments/assets/760cad66-8cf5-4620-a501-a791d592644b" />
 
 Получение всех пользователей
 ```
