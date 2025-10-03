@@ -16,31 +16,31 @@ public class FilmRepository {
     private final JdbcTemplate jdbc;
     private final FilmRowMapper mapper;
 
-    private final static String ADD_QUERY =
+    private static final  String ADD_QUERY =
             "INSERT INTO films (id, name, description, release, duration, rating) VALUES ('%d', '%s', '%s', '%s', '%d', '%s')";
-    private final static String ADD_GENRE_QUERY =
+    private static final String ADD_GENRE_QUERY =
             "INSERT INTO genres (genre) SELECT '%s' WHERE NOT EXISTS (SELECT 1 FROM genres WHERE genre = '%s')";
-    private final static String ADD_OR_UPDATE_FILM_AND_GENRE =
+    private static final String ADD_OR_UPDATE_FILM_AND_GENRE =
             "INSERT INTO films_genres (film_id, genre_id) SELECT %d, SELECT id FROM genres WHERE genre = '%s' WHERE NOT EXISTS (SELECT * FROM films_genres WHERE film_id = '%d' AND genre_id = (SELECT id FROM genres WHERE genre = '%s'))";
-    private final static String ADD_LIKES_QUERY =
+    private static final String ADD_LIKES_QUERY =
             "INSERT INTO likes (film_id, user_id) VALUES ('%d', '%d')";
-    private final static String REMOVE_QUERY =
+    private static final String REMOVE_QUERY =
             "DELETE FROM films WHERE id = '%d'";
-    private final static String REMOVE_FILM_AND_GENRE =
+    private static final String REMOVE_FILM_AND_GENRE =
             "DELETE FROM films_genres WHERE film_id = '%d'";
-    private final static String REMOVE_LIKES_QUERY =
+    private static final String REMOVE_LIKES_QUERY =
             "DELETE FROM likes WHERE film_id = '%d'";
-    private final static String UPDATE_QUERY =
+    private static final String UPDATE_QUERY =
             "UPDATE films SET name = '%s', description = '%s', release = '%s', duration = '%d', rating = '%s' WHERE id = '%d'";
-    private final static String GET_QUERY =
+    private static final String GET_QUERY =
             "SELECT * FROM films WHERE id = '%d'";
-    private final static String GET_GENRES =
+    private static final String GET_GENRES =
             "SELECT genre FROM genres WHERE id = %d";
-    private final static String GET_GENRES_FILM_AND_GENRE  =
+    private static final String GET_GENRES_FILM_AND_GENRE  =
             "SELECT genre_id FROM films_genres WHERE film_id = %d";
-    private final static String GET_LIKES_QUERY =
+    private static final String GET_LIKES_QUERY =
             "SELECT user_id FROM likes WHERE film_id = '%d'";
-    private final static String GET_ALL_QUERY =
+    private static final String GET_ALL_QUERY =
             "SELECT * FROM films";
 
     public Film add(Film film) {
