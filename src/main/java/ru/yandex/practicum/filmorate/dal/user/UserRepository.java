@@ -17,21 +17,21 @@ public class UserRepository {
     private final JdbcTemplate jdbc;
     private final UserRowMapper mapper;
 
-    private final static String ADD_QUERY =
+    private static final String ADD_QUERY =
             "INSERT INTO users (name, login, email, birthday) VALUES ('%s', '%s', '%s', '%s')";
-    private final static String ADD_FRIENDS_QUERY =
+    private static final String ADD_FRIENDS_QUERY =
             "INSERT INTO friends (user_id, friend_id) VALUES ('%d', '%d')";
-    private final static String REMOVE_QUERY =
+    private static final String REMOVE_QUERY =
             "DELETE FROM users WHERE id = '%d'";
-    private final static String REMOVE_FRIEND_QUERY =
+    private static final String REMOVE_FRIEND_QUERY =
             "DELETE FROM friends WHERE user_id = %d";
-    private final static String UPDATE_QUERY =
+    private static final String UPDATE_QUERY =
             "UPDATE users SET name = '%s', login = '%s', email = '%s', birthday = '%s' WHERE id = '%d'";
-    private final static String GET_QUERY =
+    private static final String GET_QUERY =
             "SELECT * FROM users WHERE id = '%d'";
-    private final static String GET_FRIENDS_QUERY =
+    private static final String GET_FRIENDS_QUERY =
             "SELECT friend_id FROM friends WHERE user_id = '%d'";
-    private final static String GET_ALL_QUERY =
+    private static final String GET_ALL_QUERY =
             "SELECT * FROM users";
 
     public User add(User user) {

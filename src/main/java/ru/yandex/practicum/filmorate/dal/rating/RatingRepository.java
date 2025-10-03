@@ -15,13 +15,13 @@ public class RatingRepository {
     private final JdbcTemplate jdbc;
     private final RatingRowMapper mapper;
 
-    private final static String ADD_QUERY =
+    private static final String ADD_QUERY =
             "INSERT INTO ratings (id, name) VALUES (%d, '%s')";
-    private final static String REMOVE_QUERY =
+    private static final String REMOVE_QUERY =
             "DELETE FROM ratings WHERE id = '%d'";
-    private final static String GET_QUERY =
+    private static final String GET_QUERY =
             "SELECT * FROM ratings WHERE id = '%d'";
-    private final static String GET_ALL_QUERY =
+    private static final String GET_ALL_QUERY =
             "SELECT * FROM ratings";
 
     public RatingFilm add(RatingFilm rating) {
