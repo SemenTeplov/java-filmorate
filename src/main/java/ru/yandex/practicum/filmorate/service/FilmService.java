@@ -3,9 +3,11 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.util.Rating;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -21,7 +23,7 @@ public class FilmService {
     private final UserStorage users;
 
     @Autowired
-    public FilmService(FilmStorage films, UserStorage users) {
+    public FilmService(@Qualifier("filmDbStorage") FilmStorage films, @Qualifier("userDbStorage") UserStorage users) {
         this.films = films;
         this.users = users;
     }

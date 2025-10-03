@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import ru.yandex.practicum.filmorate.model.User;
@@ -18,7 +19,7 @@ public class UserService {
     private final UserStorage users;
 
     @Autowired
-    public UserService(UserStorage users) {
+    public UserService(@Qualifier("userDbStorage") UserStorage users) {
         this.users = users;
     }
 
@@ -32,10 +33,16 @@ public class UserService {
         return users.update(user);
     }
 
+    public User get(Integer id) {
+        log.info("Got user");
+        return users.get(id);
+    }
+
     public void addFriend(Integer userId, Integer friendId) {
         log.info("Now they are friends");
-        users.get(userId).addFriend(friendId);
-        users.get(friendId).addFriend(userId);
+        User user = users.get(userId);
+        user.addFriend(friendId);
+        users.update(user);
     }
 
     public User remove(User user) {
@@ -45,8 +52,9 @@ public class UserService {
 
     public void removeFriend(Integer userId, Integer friendId) {
         log.info("They quarreled");
-        users.get(userId).removeFriend(friendId);
-        users.get(friendId).removeFriend(userId);
+        User user = users.get(userId);
+        user.removeFriend(friendId);
+        users.update(user);
     }
 
     public Collection<User> getAll() {
