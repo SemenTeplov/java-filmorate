@@ -120,6 +120,10 @@ public class FilmRepository {
 
     private void setGenres(Film film) {
         film.getGenres().forEach(g -> {
+            if (g.getId() > jdbc.queryForList(ru.yandex.practicum.filmorate.dal.genre.Queries.GET_ALL_QUERY).size()) {
+                throw new NotFoundException("Not found");
+            }
+
             jdbc.execute(String.format(Queries.ADD_OR_UPDATE_FILM_AND_GENRE_QUERY, film.getId(), g.getId(), film.getId(), g.getId()));
         });
     }
