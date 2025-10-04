@@ -41,7 +41,7 @@ public class UserService {
     public void addFriend(Integer userId, Integer friendId) {
         log.info("Now they are friends");
         User user = users.get(userId);
-        user.addFriend(friendId);
+        user.addFriend(users.get(friendId).getId());
         users.update(user);
     }
 
@@ -53,7 +53,7 @@ public class UserService {
     public void removeFriend(Integer userId, Integer friendId) {
         log.info("They quarreled");
         User user = users.get(userId);
-        user.removeFriend(friendId);
+        user.removeFriend(users.get(friendId).getId());
         users.update(user);
     }
 

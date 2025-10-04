@@ -34,7 +34,9 @@ public class FilmService {
 
     public void addLike(Integer filmId, Integer userId) {
         log.info("Like added");
-        films.get(filmId).addLike(users.get(userId).getId());
+        Film film = films.get(filmId);
+        film.addLike(users.get(userId).getId());
+        films.update(film);
     }
 
     public Film update(Film film) {
@@ -50,6 +52,10 @@ public class FilmService {
     public void removeLike(Integer filmId, Integer userId) {
         log.info("Like removed");
         films.get(filmId).removeLike(users.get(userId).getId());
+    }
+
+    public Film get(Integer id) {
+        return films.get(id);
     }
 
     public Collection<Film> getAll() {

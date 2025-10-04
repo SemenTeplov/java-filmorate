@@ -31,7 +31,7 @@ public class GenreController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Genre get(@RequestBody Integer id) {
+    public Genre get(@PathVariable Integer id) {
         return service.get(id);
     }
 

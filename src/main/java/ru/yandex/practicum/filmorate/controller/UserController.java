@@ -63,7 +63,7 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<User> getFriends(@PathVariable int id) {
+    public Collection<User> getFriends(@PathVariable Integer id) {
         return service.getFriends(id);
     }
 

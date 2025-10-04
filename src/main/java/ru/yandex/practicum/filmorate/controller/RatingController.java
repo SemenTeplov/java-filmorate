@@ -31,7 +31,7 @@ public class RatingController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RatingFilm get(@RequestBody Integer id) {
+    public RatingFilm get(@PathVariable Integer id) {
         return service.get(id);
     }
 

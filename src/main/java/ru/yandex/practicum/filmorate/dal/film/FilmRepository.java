@@ -5,9 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import ru.yandex.practicum.filmorate.dal.genre.GenreRowMapper;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
@@ -15,111 +20,108 @@ import java.util.stream.Collectors;
 public class FilmRepository {
     private final JdbcTemplate jdbc;
     private final FilmRowMapper mapper;
+    private final GenreRowMapper genreMapper;
 
-    private static final  String ADD_QUERY =
-            "INSERT INTO films (id, name, description, release, duration, rating) VALUES ('%d', '%s', '%s', '%s', '%d', '%s')";
-    private static final String ADD_GENRE_QUERY =
-            "INSERT INTO genres (genre) SELECT '%s' WHERE NOT EXISTS (SELECT 1 FROM genres WHERE genre = '%s')";
-    private static final String ADD_OR_UPDATE_FILM_AND_GENRE =
-            "INSERT INTO films_genres (film_id, genre_id) SELECT %d, SELECT id FROM genres WHERE genre = '%s' WHERE NOT EXISTS (SELECT * FROM films_genres WHERE film_id = '%d' AND genre_id = (SELECT id FROM genres WHERE genre = '%s'))";
-    private static final String ADD_LIKES_QUERY =
-            "INSERT INTO likes (film_id, user_id) VALUES ('%d', '%d')";
-    private static final String REMOVE_QUERY =
-            "DELETE FROM films WHERE id = '%d'";
-    private static final String REMOVE_FILM_AND_GENRE =
-            "DELETE FROM films_genres WHERE film_id = '%d'";
-    private static final String REMOVE_LIKES_QUERY =
-            "DELETE FROM likes WHERE film_id = '%d'";
-    private static final String UPDATE_QUERY =
-            "UPDATE films SET name = '%s', description = '%s', release = '%s', duration = '%d', rating = '%s' WHERE id = '%d'";
-    private static final String GET_QUERY =
-            "SELECT * FROM films WHERE id = '%d'";
-    private static final String GET_GENRES =
-            "SELECT genre FROM genres WHERE id = %d";
-    private static final String GET_GENRES_FILM_AND_GENRE  =
-            "SELECT genre_id FROM films_genres WHERE film_id = %d";
-    private static final String GET_LIKES_QUERY =
-            "SELECT user_id FROM likes WHERE film_id = '%d'";
-    private static final String GET_ALL_QUERY =
-            "SELECT * FROM films";
+    private Integer id = 1;
 
     public Film add(Film film) {
-        String query = String.format(ADD_QUERY,
+        if (film.getMpa().getId() >= jdbc.queryForList(ru.yandex.practicum.filmorate.dal.rating.Queries.GET_ALL_QUERY).size()) {
+            throw new NotFoundException("Not found");
+        }
+
+        film.setId(id++);
+
+        String query = String.format(Queries.ADD_QUERY,
                 film.getId(),
                 film.getName(),
                 film.getDescription(),
                 film.getReleaseDate(),
                 film.getDuration(),
-                film.getRating());
+                film.getMpa().getId());
 
         jdbc.execute(query);
 
-        film.getGenre().forEach(g -> {
-            jdbc.execute(String.format(ADD_GENRE_QUERY, g, g));
-            jdbc.execute(String.format(ADD_OR_UPDATE_FILM_AND_GENRE, film.getId(), g, film.getId(), g));
-        });
+        setGenres(film);
 
         film.getLikes().forEach(l -> {
-            jdbc.execute(String.format(ADD_LIKES_QUERY, film.getId(), l));
+            jdbc.execute(String.format(Queries.ADD_LIKES_QUERY, film.getId(), l));
         });
 
         return film;
     }
 
     public Film remove(Film film) {
-        jdbc.execute(String.format(REMOVE_FILM_AND_GENRE, film.getId()));
-        jdbc.execute(String.format(REMOVE_QUERY, film.getId()));
-        jdbc.execute(String.format(REMOVE_LIKES_QUERY, film.getId()));
+        jdbc.execute(String.format(Queries.REMOVE_FILM_AND_GENRE_QUERY, film.getId()));
+        jdbc.execute(String.format(Queries.REMOVE_QUERY, film.getId()));
+        jdbc.execute(String.format(Queries.REMOVE_LIKES_QUERY, film.getId()));
 
         return film;
     }
 
     public Film update(Film film) {
-        String query = String.format(UPDATE_QUERY,
+        if (jdbc.query(Queries.GET_ALL_QUERY, mapper).stream().noneMatch(f -> Objects.equals(f.getId(), film.getId()))) {
+            throw new NotFoundException("Not found");
+        }
+
+        String query = String.format(Queries.UPDATE_QUERY,
                         film.getName(),
                         film.getDescription(),
                         film.getReleaseDate(),
                         film.getDuration(),
-                        film.getRating(),
+                        film.getMpa().getId(),
                         film.getId());
 
         jdbc.execute(query);
-        jdbc.execute(String.format(REMOVE_FILM_AND_GENRE, film.getId()));
+        jdbc.execute(String.format(Queries.REMOVE_FILM_AND_GENRE_QUERY, film.getId()));
 
-        film.getGenre().forEach(g -> {
-            jdbc.execute(String.format(ADD_GENRE_QUERY, g, g));
-            jdbc.execute(String.format(ADD_OR_UPDATE_FILM_AND_GENRE, film.getId(), g, film.getId(), g));
-        });
+        setGenres(film);
 
-        jdbc.execute(String.format(REMOVE_LIKES_QUERY, film.getId()));
+        jdbc.execute(String.format(Queries.REMOVE_LIKES_QUERY, film.getId()));
 
         film.getLikes().forEach(l -> {
-            jdbc.execute(String.format(ADD_LIKES_QUERY, film.getId(), l));
+            jdbc.execute(String.format(Queries.ADD_LIKES_QUERY, film.getId(), l));
         });
 
         return film;
     }
 
     public Film get(Integer id) {
-        Film film = jdbc.query(String.format(GET_QUERY, id), mapper).getFirst();
+        Film film = jdbc.query(String.format(Queries.GET_QUERY, id), mapper).getFirst();
 
-        film.setGenre(jdbc.queryForList(String.format(GET_GENRES_FILM_AND_GENRE, id), Integer.class)
-                .stream()
-                .map(i -> jdbc.queryForObject(String.format(GET_GENRES, i), String.class))
-                .toList());
+        film.setGenres(getGenres(film.getId()));
 
-        jdbc.queryForList(String.format(GET_LIKES_QUERY, id), Integer.class).forEach(film::addLike);
+        film.getMpa().setName(jdbc.queryForList(String.format(Queries.GET_MPA_QUERY, film.getMpa().getId()), String.class).getFirst());
+
+        jdbc.queryForList(String.format(Queries.GET_LIKES_QUERY, id), Integer.class).forEach(film::addLike);
 
         return film;
     }
 
     public Collection<Film> getAll() {
-        return jdbc.query(GET_ALL_QUERY, mapper).stream().peek(f -> {
-            f.setGenre(jdbc.queryForList(String.format(GET_GENRES_FILM_AND_GENRE, f.getId()), Integer.class)
+        return jdbc.query(Queries.GET_ALL_QUERY, mapper).stream().peek(f -> {
+            f.setGenres(getGenres(f.getId()));
+            jdbc.queryForList(String.format(Queries.GET_LIKES_QUERY, f.getId()), Integer.class).forEach(f::addLike);
+
+            if (f.getMpa() != null) {
+                f.getMpa().setName(jdbc.queryForList(String.format(Queries.GET_MPA_QUERY, f.getMpa().getId()), String.class).getFirst());
+            }
+        }).toList();
+    }
+
+    private List<Genre> getGenres(Integer id) {
+        try {
+            return jdbc.queryForList(String.format(Queries.GET_GENRES_FILM_AND_GENRE_QUERY, id), Integer.class)
                     .stream()
-                    .map(i -> jdbc.queryForObject(String.format(GET_GENRES, i), String.class))
-                    .toList());
-            jdbc.queryForList(String.format(GET_LIKES_QUERY, f.getId()), Integer.class).forEach(f::addLike);
-        }).collect(Collectors.toSet());
+                    .map(genre_id -> jdbc.query(String.format(Queries.GET_GENRES_QUERY, genre_id), genreMapper).getFirst())
+                    .toList();
+        } catch (Exception e) {
+            throw new NotFoundException("Not found");
+        }
+    }
+
+    private void setGenres(Film film) {
+        film.getGenres().forEach(g -> {
+            jdbc.execute(String.format(Queries.ADD_OR_UPDATE_FILM_AND_GENRE_QUERY, film.getId(), g.getId(), film.getId(), g.getId()));
+        });
     }
 }

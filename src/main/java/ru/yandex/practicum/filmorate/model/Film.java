@@ -10,7 +10,6 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import ru.yandex.practicum.filmorate.annotations.ValidReleaseDate;
-import ru.yandex.practicum.filmorate.model.util.Rating;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Film {
     @Id
-    private int id;
+    private Integer id;
 
     @NotNull(message = "Name is null")
     @NotBlank(message = "Name is empty")
@@ -38,9 +37,9 @@ public class Film {
     @Min(value = 1, message = "Duration isn't positive")
     private int duration;
 
-    private List<String> genre = new ArrayList<>();
+    private List<Genre> genres = new ArrayList<>();
 
-    private Rating rating;
+    private RatingFilm mpa;
 
     @Setter(AccessLevel.NONE)
     private final Set<Integer> likes = new HashSet<>();
