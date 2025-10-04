@@ -83,8 +83,10 @@ public class UserRepository {
     }
 
     private void setFriends(User user) {
-        user.getFriends().forEach(f -> {
-            jdbc.execute(String.format(Queries.ADD_FRIENDS_QUERY, user.getId(), f));
-        });
+        if (!user.getFriends().isEmpty()) {
+            user.getFriends().forEach(f -> {
+                jdbc.execute(String.format(Queries.ADD_FRIENDS_QUERY, user.getId(), f));
+            });
+        }
     }
 }
