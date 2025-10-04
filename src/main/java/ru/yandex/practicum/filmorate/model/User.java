@@ -4,19 +4,19 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+
+import lombok.*;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class User {
-    private int id;
+    @Id
+    private Integer id;
 
     @NotNull(message = "Email is null")
     @NotBlank(message = "Email is empty")
