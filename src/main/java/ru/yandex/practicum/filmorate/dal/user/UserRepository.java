@@ -49,7 +49,7 @@ public class UserRepository {
         }
 
         String query = String.format(Queries.UPDATE_QUERY,
-                user.getName(),
+                user.getName().replace("'", " "),
                 user.getLogin(),
                 user.getEmail(),
                 user.getBirthday(),
