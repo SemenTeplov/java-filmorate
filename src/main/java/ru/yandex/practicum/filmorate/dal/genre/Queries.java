@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.dal.genre;
 
 public class Queries {
-    private Queries() {}
+    private Queries() {
+
+    }
 
     public static final String ADD_QUERY =
             "INSERT INTO genres (id, name) VALUES ('%d', '%s')";

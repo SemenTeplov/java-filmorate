@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.dal.user;
 
 public class Queries {
-    private Queries() {}
+    private Queries() {
+
+    }
 
     public static final String ADD_QUERY =
             "INSERT INTO users (id, name, login, email, birthday) VALUES ('%d', '%s', '%s', '%s', '%s')";
