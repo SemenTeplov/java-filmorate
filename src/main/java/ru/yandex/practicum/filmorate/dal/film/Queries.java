@@ -1,7 +1,9 @@
 package ru.yandex.practicum.filmorate.dal.film;
 
 public class Queries {
-    private Queries() {}
+    private Queries() {
+
+    }
 
     public static final  String ADD_QUERY =
             "INSERT INTO films (id, name, description, release, duration, rating_id) VALUES ('%d', '%s', '%s', '%s', '%d', '%d')";
