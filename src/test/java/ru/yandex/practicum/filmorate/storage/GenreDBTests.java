@@ -27,7 +27,7 @@ public class GenreDBTests {
         genre = new Genre();
 
         genre.setId(1);
-        genre.setGenre("Comedy");
+        genre.setName("Comedy");
     }
 
     @Test

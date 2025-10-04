@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.assertj.core.api.Assertions;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.RatingFilm;
 import ru.yandex.practicum.filmorate.storage.film.FilmDbStorage;
 
 import java.time.LocalDate;
@@ -29,10 +30,12 @@ class FilmDBTests {
 	public static void init() {
 		film = new Film();
 
+		film.setId(1);
 		film.setName("film");
 		film.setDescription("some text");
 		film.setReleaseDate(LocalDate.now());
-		film.setMpa("G");
+		film.setDuration(45);
+		film.setMpa(new RatingFilm(1, null));
 	}
 
 	@Test

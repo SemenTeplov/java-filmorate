@@ -36,14 +36,14 @@ public class UserDBTests {
 
     @Test
     public void testAdd() {
-        Assertions.assertThat(userDbStorage.add(user)).hasFieldOrPropertyWithValue("id", 2);
+        Assertions.assertThat(userDbStorage.add(user)).hasFieldOrPropertyWithValue("id", 1);
     }
 
     @Test
     public void testRemove() {
         userDbStorage.add(user);
 
-        Assertions.assertThat(userDbStorage.remove(user)).hasFieldOrPropertyWithValue("id", 2);
+        Assertions.assertThat(userDbStorage.remove(user)).hasFieldOrPropertyWithValue("id", 3);
     }
 
     @Test

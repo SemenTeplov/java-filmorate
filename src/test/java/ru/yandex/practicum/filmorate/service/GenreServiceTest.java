@@ -29,7 +29,7 @@ public class GenreServiceTest {
     @BeforeAll
     static void init() {
         genre.setId(1);
-        genre.setGenre("Comedy");
+        genre.setName("Comedy");
     }
 
     @Test
