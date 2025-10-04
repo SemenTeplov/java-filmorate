@@ -6,7 +6,7 @@ public class Queries {
     }
 
     public static final String ADD_QUERY =
-            "INSERT INTO users (id, name, login, email, birthday) VALUES ('%d', '%s', '%s', '%s', '%s')";
+            "INSERT INTO users (id, name, login, email, birthday) VALUES (%d, '%s', '%s', '%s', '%s')";
     public static final String ADD_FRIENDS_QUERY =
             "INSERT INTO friends (user_id, friend_id) VALUES ('%d', '%d')";
 

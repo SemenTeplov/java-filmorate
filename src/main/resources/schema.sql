@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS users (id INTEGER, name VARCHAR, login VARCHAR, email VARCHAR, birthday DATE)
+CREATE TABLE IF NOT EXISTS users (id INTEGER, name VARCHAR, login VARCHAR, email VARCHAR, birthday VARCHAR)
 
 CREATE TABLE IF NOT EXISTS friends (user_id INTEGER, friend_id INTEGER)
 
-CREATE TABLE IF NOT EXISTS films (id INTEGER, name VARCHAR, description TEXT, release DATE, duration INTEGER, rating_id INTEGER)
+CREATE TABLE IF NOT EXISTS films (id INTEGER, name VARCHAR, description TEXT, release VARCHAR, duration INTEGER, rating_id INTEGER)
 
 CREATE TABLE IF NOT EXISTS likes (user_id INTEGER, film_id INTEGER)
 

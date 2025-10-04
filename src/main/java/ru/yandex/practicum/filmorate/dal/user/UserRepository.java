@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -24,9 +26,9 @@ public class UserRepository {
 
         String query = String.format(Queries.ADD_QUERY,
                 user.getId(),
-                user.getName(),
-                user.getLogin(),
-                user.getEmail(),
+                user.getName().replace("'", " "),
+                user.getLogin().replace("'", " "),
+                user.getEmail().replace("'", " "),
                 user.getBirthday());
 
         jdbc.execute(query);
