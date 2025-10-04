@@ -22,9 +22,10 @@ public class FilmRepository {
     private final GenreRowMapper genreMapper;
 
     private Integer id = 1;
+    private Integer maxMpa = 5;
 
     public Film add(Film film) {
-        if (film.getMpa() != null && film.getMpa().getId() > jdbc.queryForList(ru.yandex.practicum.filmorate.dal.rating.Queries.GET_ALL_QUERY).size()) {
+        if (film.getMpa() != null && film.getMpa().getId() > maxMpa) {
             throw new NotFoundException("Not found");
         }
 
