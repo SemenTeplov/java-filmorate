@@ -24,7 +24,7 @@ public class FilmRepository {
     private Integer id = 1;
 
     public Film add(Film film) {
-        if (film.getMpa() != null && film.getMpa().getId() >= jdbc.queryForList(ru.yandex.practicum.filmorate.dal.rating.Queries.GET_ALL_QUERY).size()) {
+        if (film.getMpa() != null && film.getMpa().getId() > jdbc.queryForList(ru.yandex.practicum.filmorate.dal.rating.Queries.GET_ALL_QUERY).size()) {
             throw new NotFoundException("Not found");
         }
 
