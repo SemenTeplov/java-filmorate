@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.rating;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.yandex.practicum.filmorate.dal.rating.RatingRepository;
