@@ -51,6 +51,12 @@ public class FilmController {
         service.removeLike(id, userId);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Film get(@PathVariable Integer id) {
+        return service.get(id);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<Film> getAll() {
@@ -59,7 +65,7 @@ public class FilmController {
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<Film> getPopular(@PathVariable(required = false) Integer count) {
-        return service.getFilms(count == null ? 10 : count);
+    public Collection<Film> getPopular(@RequestParam(value = "count", required = false, defaultValue = "10") Integer count) {
+        return service.getFilms(count);
     }
 }
