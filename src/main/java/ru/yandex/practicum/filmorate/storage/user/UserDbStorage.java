@@ -12,7 +12,6 @@ import java.util.Collection;
 public class UserDbStorage implements UserStorage {
     private final UserRepository repository;
 
-    @Autowired
     public UserDbStorage(UserRepository repository) {
         this.repository = repository;
     }

@@ -12,7 +12,6 @@ import java.util.Collection;
 public class RatingDbStorage implements RatingStorage {
     private final RatingRepository repository;
 
-    @Autowired
     public RatingDbStorage(RatingRepository repository) {
         this.repository = repository;
     }

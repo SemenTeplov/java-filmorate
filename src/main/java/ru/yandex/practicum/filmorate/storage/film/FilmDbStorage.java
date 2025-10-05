@@ -15,7 +15,6 @@ import java.util.Collection;
 public class FilmDbStorage implements FilmStorage {
     private final FilmRepository repository;
 
-    @Autowired
     public FilmDbStorage(FilmRepository repository) {
         this.repository = repository;
     }

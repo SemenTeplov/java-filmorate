@@ -12,7 +12,6 @@ import java.util.Collection;
 public class GenreDbStorage implements GenreStorage {
     private final GenreRepository repository;
 
-    @Autowired
     public GenreDbStorage(GenreRepository repository) {
         this.repository = repository;
     }

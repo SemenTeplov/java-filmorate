@@ -8,9 +8,9 @@ public class Queries {
     public static final  String ADD_QUERY =
             "INSERT INTO films (id, name, description, release, duration, rating_id) VALUES ('%d', '%s', '%s', '%s', '%d', '%d')";
     public static final String ADD_OR_UPDATE_FILM_AND_GENRE_QUERY =
-            "INSERT INTO films_genres (film_id, genre_id) SELECT '%d', '%d' WHERE NOT EXISTS (SELECT 1 FROM films_genres WHERE film_id = '%d' AND genre_id = '%d')";
+            "INSERT INTO films_genres (film_id, genre_id) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM films_genres WHERE film_id = ? AND genre_id = ?)";
     public static final String ADD_LIKES_QUERY =
-            "INSERT INTO likes (film_id, user_id) VALUES ('%d', '%d')";
+            "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
 
     public static final String REMOVE_QUERY =
             "DELETE FROM films WHERE id = '%d'";
@@ -23,7 +23,9 @@ public class Queries {
             "UPDATE films SET name = '%s', description = '%s', release = '%s', duration = '%d', rating_id = '%d' WHERE id = '%d'";
 
     public static final String GET_QUERY =
-            "SELECT * FROM films WHERE id = '%d'";
+            "SELECT films.id AS id, films.name AS name, films.description AS description, " +
+                    "films.release AS release, films.duration AS duration, ratings.id AS rating_id, ratings.name AS ratings_name " +
+                    "FROM films JOIN ratings ON films.rating_id = ratings.id WHERE films.id = '%d'";
     public static final String GET_GENRES_QUERY =
             "SELECT * FROM genres WHERE id = %d";
     public static final String GET_GENRES_FILM_AND_GENRE_QUERY  =
@@ -33,5 +35,7 @@ public class Queries {
     public static final String GET_MPA_QUERY =
             "SELECT name FROM ratings WHERE id = '%d'";
     public static final String GET_ALL_QUERY =
-            "SELECT * FROM films";
+            "SELECT films.id AS id, films.name AS name, films.description AS description, films.release AS release, " +
+                    "films.duration AS duration, ratings.id AS rating_id, ratings.name AS ratings_name " +
+                    "FROM films JOIN ratings ON films.rating_id = ratings.id";
 }

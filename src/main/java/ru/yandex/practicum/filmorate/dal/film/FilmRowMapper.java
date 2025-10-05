@@ -15,17 +15,12 @@ public class FilmRowMapper implements RowMapper<Film> {
     public Film mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Film film = new Film();
 
-        RatingFilm mpa = new RatingFilm();
-
-        mpa.setId(resultSet.getInt("rating_id"));
-
-
         film.setId(resultSet.getInt("id"));
         film.setName(resultSet.getString("name"));
         film.setDescription(resultSet.getString("description"));
         film.setReleaseDate(resultSet.getDate("release").toLocalDate());
         film.setDuration(resultSet.getInt("duration"));
-        film.setMpa(mpa);
+        film.setMpa(new RatingFilm(resultSet.getInt("rating_id"), resultSet.getString("ratings_name")));
 
         return film;
     }

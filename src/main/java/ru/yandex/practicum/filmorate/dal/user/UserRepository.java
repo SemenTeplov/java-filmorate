@@ -2,12 +2,15 @@ package ru.yandex.practicum.filmorate.dal.user;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -84,8 +87,17 @@ public class UserRepository {
 
     private void setFriends(User user) {
         if (!user.getFriends().isEmpty()) {
-            user.getFriends().forEach(f -> {
-                jdbc.execute(String.format(Queries.ADD_FRIENDS_QUERY, user.getId(), f));
+            jdbc.batchUpdate(Queries.ADD_FRIENDS_QUERY, new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ps.setInt(1, user.getId());
+                    ps.setInt(2, user.getFriends().stream().toList().get(i));
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return user.getFriends().size();
+                }
             });
         }
     }

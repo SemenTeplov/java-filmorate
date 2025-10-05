@@ -2,14 +2,18 @@ package ru.yandex.practicum.filmorate.dal.film;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ru.yandex.practicum.filmorate.dal.genre.GenreRowMapper;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -23,10 +27,11 @@ public class FilmRepository {
 
     private Integer id = 1;
     private Integer maxMpa = 5;
+    private Integer maxGenre = 6;
 
     public Film add(Film film) {
         if (film.getMpa() != null && film.getMpa().getId() > maxMpa) {
-            throw new NotFoundException("Not found");
+            throw new NotValidationException("Rating don't validation");
         }
 
         film.setId(id++);
@@ -42,10 +47,7 @@ public class FilmRepository {
         jdbc.execute(query);
 
         setGenres(film);
-
-        film.getLikes().forEach(l -> {
-            jdbc.execute(String.format(Queries.ADD_LIKES_QUERY, film.getId(), l));
-        });
+        setLikes(film);
 
         return film;
     }
@@ -78,9 +80,7 @@ public class FilmRepository {
 
         jdbc.execute(String.format(Queries.REMOVE_LIKES_QUERY, film.getId()));
 
-        film.getLikes().forEach(l -> {
-            jdbc.execute(String.format(Queries.ADD_LIKES_QUERY, film.getId(), l));
-        });
+        setLikes(film);
 
         return film;
     }
@@ -89,8 +89,6 @@ public class FilmRepository {
         Film film = jdbc.query(String.format(Queries.GET_QUERY, id), mapper).getFirst();
 
         film.setGenres(getGenres(film.getId()));
-
-        film.getMpa().setName(jdbc.queryForList(String.format(Queries.GET_MPA_QUERY, film.getMpa().getId()), String.class).getFirst());
 
         jdbc.queryForList(String.format(Queries.GET_LIKES_QUERY, id), Integer.class).forEach(film::addLike);
 
@@ -101,10 +99,6 @@ public class FilmRepository {
         return jdbc.query(Queries.GET_ALL_QUERY, mapper).stream().peek(f -> {
             f.setGenres(getGenres(f.getId()));
             jdbc.queryForList(String.format(Queries.GET_LIKES_QUERY, f.getId()), Integer.class).forEach(f::addLike);
-
-            if (f.getMpa() != null) {
-                f.getMpa().setName(jdbc.queryForList(String.format(Queries.GET_MPA_QUERY, f.getMpa().getId()), String.class).getFirst());
-            }
         }).toList();
     }
 
@@ -120,12 +114,38 @@ public class FilmRepository {
     }
 
     private void setGenres(Film film) {
-        film.getGenres().forEach(g -> {
-            if (g.getId() > jdbc.queryForList(ru.yandex.practicum.filmorate.dal.genre.Queries.GET_ALL_QUERY).size()) {
-                throw new NotFoundException("Not found");
+        jdbc.batchUpdate(Queries.ADD_OR_UPDATE_FILM_AND_GENRE_QUERY, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                if (film.getGenres().get(i).getId() > maxGenre) {
+                    throw new NotFoundException("Not found");
+                }
+
+                ps.setInt(1, film.getId());
+                ps.setInt(2, film.getGenres().get(i).getId());
+                ps.setInt(3, film.getId());
+                ps.setInt(4, film.getGenres().get(i).getId());
             }
 
-            jdbc.execute(String.format(Queries.ADD_OR_UPDATE_FILM_AND_GENRE_QUERY, film.getId(), g.getId(), film.getId(), g.getId()));
+            @Override
+            public int getBatchSize() {
+                return film.getGenres().size();
+            }
+        });
+    }
+
+    private void setLikes(Film film) {
+        jdbc.batchUpdate(Queries.ADD_LIKES_QUERY, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, film.getId());
+                ps.setInt(2, film.getLikes().stream().toList().get(i));
+            }
+
+            @Override
+            public int getBatchSize() {
+                return film.getLikes().size();
+            }
         });
     }
 }
